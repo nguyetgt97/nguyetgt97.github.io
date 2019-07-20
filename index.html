@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Website manage</title>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<style type="text/css">
+table{
+    width:100%;
+}
+table,th,td{
+    border:2px solid gray;
+    border-collapse: collapse;
+    font-size: 150%;
+}
+p{
+    color:black;
+    font-family: monospace;
+    font-size:80px;
+    text-align: center;
+}
+th,td{
+    padding:7px 15px;
+    text-align: center;
+}
+th{
+    background-color:blue;
+    color: white;
+}
+tr:nth-child(even){
+    background-color: #F0F0F0;
+}
+tr:hover{
+    background-color: #ddd;
+}
+</style>
+</head>
+
+<body>
+    <p>Alkalinity of water data</p>
+    <table border="1">
+        <thead >
+        <tr>
+            <th>STT</th>
+            <th>Time</th>
+            <th>Alkalinity</th>
+        </tr>
+        </thead>
+        <tbody class="mypanel">
+        </tbody>
+    </table>
+   
+    <script>
+    $.getJSON('https://api.thingspeak.com/channels/822571/feeds.json', function(data) {
+        var txt = ``;
+        for(var i = 0; i <data.feeds.length; i++){
+            var date = new Date(data.feeds[i].created_at);
+            txt += `<tr>
+            <td>${i+1}</td>
+            <td>${date.toLocaleTimeString()} - ${date.toLocaleDateString()}</td>
+            <td><font color="red">${data.feeds[i].field1} mg CaCo3/L </font></td>
+        </tr>`
+        }      
+        
+        $(".mypanel").html(txt);
+    });
+    </script>
+</body>
+</html>
